@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include "matrixmath.h"
+#include "vectors.h"
 
 typedef double TimestampMJD;
 
@@ -13,52 +14,10 @@ struct String {
   char *data;
 };
 
-struct VecF64 {
-  size_t length;
-  double *data;
-};
-
-void ct_vec_f64_free(struct VecF64 *vec) {
-  if (vec->data != NULL) {
-    free(vec->data);
-    vec->data = NULL;
-  }
-}
-
-int ct_vec_f64_new(struct VecF64 *vec, size_t length) {
-  vec->length = length;
-  vec->data = malloc(length * sizeof(double));
-  if (vec->data == NULL) {
-    return -1;
-  }
-  return 0;
-}
-
-struct VecTimestampMJD {
-  size_t length;
-  TimestampMJD *data;
-};
-
-void ct_vec_timestamp_mjd_free(struct VecTimestampMJD *vec) {
-  if (vec->data != NULL) {
-    free(vec->data);
-    vec->data = NULL;
-  }
-}
-
-int ct_vec_timestamp_mjd_new(struct VecTimestampMJD *vec, size_t length) {
-  vec->length = length;
-  vec->data = malloc(length * sizeof(TimestampMJD));
-  if (vec->data == NULL) {
-    return -1;
-  }
-  return 0;
-}
-
 struct TopocentricPointSources {
   struct VecF64 ra;
   struct VecF64 dec;
-  struct VecTimestampMJD t;
+  struct VecF64 t; // MJD
   struct String *obscode;
 };
 
@@ -67,7 +26,7 @@ struct CartesianPointSources {
   struct VecF64 x;
   struct VecF64 y;
   struct VecF64 z;
-  struct VecTimestampMJD t;
+  struct VecF64 t;  // MJD
 };
 
 struct CartesianPointSource {
@@ -76,37 +35,37 @@ struct CartesianPointSource {
   double x;
   double y;
   double z;
-  TimestampMJD t;
+  double t;
 };
 
 struct GnomonicPointSources {
   // Always heliocentric. Relative to some center point.
   struct VecF64 x;
   struct VecF64 y;
-  struct VecTimestampMJD t;
+  struct VecF64 t;
 };
 
-void ct_gnomonic_point_sources_free(struct GnomonicPointSources *gnomonic) {
-  ct_vec_f64_free(&gnomonic->x);
-  ct_vec_f64_free(&gnomonic->y);
-  ct_vec_timestamp_mjd_free(&gnomonic->t);
+void gnomonic_point_sources_free(struct GnomonicPointSources *gnomonic) {
+  vec_f64_free(&gnomonic->x);
+  vec_f64_free(&gnomonic->y);
+  vec_f64_free(&gnomonic->t);
 }
 
-int ct_gnomonic_point_sources_new(struct GnomonicPointSources *gnomonic, size_t length) {
-  if (ct_vec_f64_new(&gnomonic->x, length) != 0) {
+int gnomonic_point_sources_new(struct GnomonicPointSources *gnomonic, size_t length) {
+  if (vec_f64_new(&gnomonic->x, length) != 0) {
     goto fail;
   }
-  if (ct_vec_f64_new(&gnomonic->y, length) != 0) {
+  if (vec_f64_new(&gnomonic->y, length) != 0) {
     goto fail;
   }
-  if (ct_vec_timestamp_mjd_new(&gnomonic->t, length) != 0) {
+  if (vec_f64_new(&gnomonic->t, length) != 0) {
     goto fail;
   }
 
   return 0;
 
  fail:
-  ct_gnomonic_point_sources_free(gnomonic);
+  gnomonic_point_sources_free(gnomonic);
   return -1;
 }
 
@@ -114,7 +73,7 @@ int CT_ERR_INVALID_CENTER = 1;
 int CT_ERR_NOT_INVERTIBLE = 2;
 int CT_ERR_OUT_OF_MEMORY = 3;
 
-int ct_cartesian_to_gnomonic(struct CartesianPointSources *cartesian, struct CartesianPointSource *center, struct GnomonicPointSources *gnomonic) {
+int cartesian_to_gnomonic(struct CartesianPointSources *cartesian, struct CartesianPointSource *center, struct GnomonicPointSources *gnomonic) {
   /// Projects Cartesian coordinates onto a gnomonic tangent plane.
   /// The center point is the origin of the gnomonic projection.
 

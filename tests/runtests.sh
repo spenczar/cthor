@@ -4,6 +4,7 @@ echo "Running unit tests:"
 
 for i in tests/*_tests
 do
+    echo "Running $i"
     $i | tee tests/tests.log
     if [ ! $? ]
     then

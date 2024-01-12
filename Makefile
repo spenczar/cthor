@@ -15,6 +15,8 @@ all: build/libcthor.a
 
 clean:
 	rm -rf build
+	rm tests/*_tests
+	rm tests/tests.log
 
 $(TARGET): build $(OBJECTS)
 	ar rcs $@ $(OBJECTS)
@@ -24,11 +26,14 @@ build:
 	@mkdir -p build
 	@mkdir -p bin
 
+$(TESTS): $(TARGET) $(TEST_SRC)
+	$(CC) $(CFLAGS) $@.c -o $@ $(TARGET) -Isrc
+
 tests: LDLIBS += $(TARGET) -Isrc
-tests: $(TESTS)
+tests: $(TESTS) 
 	bash ./tests/runtests.sh
 
-tests/%.o: tests/%.c src/%.c
+tests/%.o: tests/%.c src/%.c $(TARGET)
 	@mkdir -p build
 	$(CC) $(CFLAGS) -c $< -o $@
 
