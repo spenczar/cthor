@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 SOURCES=$(wildcard src/**/*.c src/*.c)
 OBJECTS=$(patsubst %.c,%.o,$(SOURCES))
@@ -14,10 +14,12 @@ TARGET_BIN=build/cthor
 all: build/libcthor.a
 
 clean:
+	rm -f $(OBJECTS)
 	rm -rf build
-	rm tests/*_tests
-	rm tests/tests.log
+	rm -f tests/*_tests
+	rm -f tests/tests.log
 
+$(TARGET): LDLIBS += -lm
 $(TARGET): build $(OBJECTS)
 	ar rcs $@ $(OBJECTS)
 	ranlib $@
@@ -26,8 +28,11 @@ build:
 	@mkdir -p build
 	@mkdir -p bin
 
+# Add -lm for math.h
+src/projections.o: LDLIBS += -lm
+
 $(TESTS): $(TARGET) $(TEST_SRC)
-	$(CC) $(CFLAGS) $@.c -o $@ $(TARGET) -Isrc
+	$(CC) $(CFLAGS) $@.c -o $@ $(TARGET) -Isrc -lm
 
 tests: $(TESTS) 
 	./tests/runtests.sh
