@@ -4,76 +4,16 @@
 #include <math.h>
 #include <stdio.h>
 
+
 #include "matrixmath.h"
 #include "vectors.h"
-
-typedef double TimestampMJD;
-
-struct String {
-  size_t length;
-  char *data;
-};
-
-struct TopocentricPointSources {
-  struct VecF64 ra;
-  struct VecF64 dec;
-  struct VecF64 t; // MJD
-  struct String *obscode;
-};
-
-struct CartesianPointSources {
-  // Always heliocentric
-  struct VecF64 x;
-  struct VecF64 y;
-  struct VecF64 z;
-  struct VecF64 t;  // MJD
-};
-
-struct CartesianPointSource {
-  /// A single point source in Cartesian coordinates.
-  /// Always heliocentric
-  double x;
-  double y;
-  double z;
-  double t;
-};
-
-struct GnomonicPointSources {
-  // Always heliocentric. Relative to some center point.
-  struct VecF64 x;
-  struct VecF64 y;
-  struct VecF64 t;
-};
-
-void gnomonic_point_sources_free(struct GnomonicPointSources *gnomonic) {
-  vec_f64_free(&gnomonic->x);
-  vec_f64_free(&gnomonic->y);
-  vec_f64_free(&gnomonic->t);
-}
-
-int gnomonic_point_sources_new(struct GnomonicPointSources *gnomonic, size_t length) {
-  if (vec_f64_new(&gnomonic->x, length) != 0) {
-    goto fail;
-  }
-  if (vec_f64_new(&gnomonic->y, length) != 0) {
-    goto fail;
-  }
-  if (vec_f64_new(&gnomonic->t, length) != 0) {
-    goto fail;
-  }
-
-  return 0;
-
- fail:
-  gnomonic_point_sources_free(gnomonic);
-  return -1;
-}
+#include "point_sources.h"
 
 int CT_ERR_INVALID_CENTER = 1;
 int CT_ERR_NOT_INVERTIBLE = 2;
 int CT_ERR_OUT_OF_MEMORY = 3;
 
-int cartesian_to_gnomonic(struct CartesianPointSources *cartesian, struct CartesianPointSource *center, struct GnomonicPointSources *gnomonic) {
+int cartesian_to_gnomonic(struct CartesianPointSources *cartesian, double center[3], struct GnomonicPointSources *gnomonic) {
   /// Projects Cartesian coordinates onto a gnomonic tangent plane.
   /// The center point is the origin of the gnomonic projection.
 
@@ -82,13 +22,13 @@ int cartesian_to_gnomonic(struct CartesianPointSources *cartesian, struct Cartes
   // towards the center point as one of the basis vectors.
 
   // Check that the center point is not the origin.
-  if (center->x == 0 && center->y == 0 && center->z == 0) {
+  if (center[0] == 0 && center[1] == 0 && center[2] == 0) {
     return CT_ERR_INVALID_CENTER;
   }
 
   // Normalize the center vector.
-  double center_mag = sqrt(center->x * center->x + center->y * center->y + center->z * center->z);
-  double center_vec[3] = {center->x / center_mag, center->y / center_mag, center->z / center_mag};
+  double center_mag = sqrt(center[0] * center[0] + center[1] * center[1] + center[2] * center[2]);
+  double center_vec[3] = {center[0] / center_mag, center[1] / center_mag, center[2] / center_mag};
 
   // Cross the center vector with the x-axis to get the second basis vector.
   double x_axis[3] = {1, 0, 0};

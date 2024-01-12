@@ -29,9 +29,11 @@ build:
 $(TESTS): $(TARGET) $(TEST_SRC)
 	$(CC) $(CFLAGS) $@.c -o $@ $(TARGET) -Isrc
 
-tests: LDLIBS += $(TARGET) -Isrc
 tests: $(TESTS) 
-	bash ./tests/runtests.sh
+	./tests/runtests.sh
+
+valgrind-tests: $(TESTS)
+	@env VALGRIND=1 ./tests/runtests.sh
 
 tests/%.o: tests/%.c src/%.c $(TARGET)
 	@mkdir -p build
