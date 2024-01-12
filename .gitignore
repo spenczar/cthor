@@ -1,0 +1,5 @@
+*~
+*.log
+*.o
+build/
+tests/*_tests
