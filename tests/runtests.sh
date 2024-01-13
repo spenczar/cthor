@@ -22,7 +22,7 @@ say_yellow "Running unit tests:"
 
 ALL_PASSED=1
 FAILURES=""
-for i in tests/*_tests; do
+for i in tests/*tests; do
     say_yellow "Running $i"
     $RUNNER $i 
     if [ $? -ne 0 ]; then

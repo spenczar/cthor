@@ -19,6 +19,9 @@ clean:
 	rm -f tests/*_tests
 	rm -f tests/tests.log
 
+# Add -lm for math.h
+src/projections.o: LDLIBS += -lm
+
 $(TARGET): LDLIBS += -lm
 $(TARGET): build $(OBJECTS)
 	ar rcs $@ $(OBJECTS)
@@ -28,11 +31,12 @@ build:
 	@mkdir -p build
 	@mkdir -p bin
 
-# Add -lm for math.h
-src/projections.o: LDLIBS += -lm
+build/lib: build
+	@mkdir -p build/lib
 
-$(TESTS): $(TARGET) $(TEST_SRC)
-	$(CC) $(CFLAGS) $@.c -o $@ $(TARGET) -Isrc -lm
+$(TESTS): CFLAGS += -Isrc -Itests -DDEBUG -g
+$(TESTS): $(TARGET) $(TEST_SRC) 
+	$(CC) $(CFLAGS) $@.c -o $@ $(TARGET) -lm 
 
 tests: $(TESTS) 
 	./tests/runtests.sh

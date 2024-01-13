@@ -9,4 +9,6 @@ void matmul_3x3_3x1(double matrix[3][3], double vec[3], double result[3]);
 
 enum MatrixMathError matinv_3x3(double matrix[3][3], double matrix_inv[3][3]);
 
+void cross_3(double a[3], double b[3], double result[3]);
+
 #endif

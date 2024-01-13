@@ -6,19 +6,31 @@
 
 int tests_run = 0;
 
-static char* test_cartesian_to_gnomonic_projection() {
-
-  // Set up some Cartesian coordinates:
+static char* test_cartesian_to_gnomonic_projection(void) {
+  // Set up some Cartesian coordinates - a few point source detections by W84.
+  // These were run through the Python THOR
   struct CartesianPointSources cartesian;
   int status = cartesian_point_sources_new(&cartesian, 10);
   ut_assert(status == 0, "cartesian_point_sources_new failed");
 
-  cartesian_point_sources_push(&cartesian, 1.0, 2.0, 3.0, 4.0);
-  cartesian_point_sources_push(&cartesian, 5.0, 6.0, 7.0, 8.0);
-  cartesian_point_sources_push(&cartesian, 9.0, 10.0, 11.0, 12.0);
+  cartesian_point_sources_push(&cartesian,
+			       2.32724566583692,
+			       -0.449382385055792,
+			       0.0866176471970003,
+			       56537.2416032334);
+  cartesian_point_sources_push(&cartesian,
+			       2.32728038367672,
+			       -0.44938629368127,
+			       0.0856592596632065,
+			       56537.2416032334);
+  cartesian_point_sources_push(&cartesian,
+			       2.32729293752894,
+			       0.449243941523289,
+			       0.0860639174895683,
+			       56537.2416032334);
 
-  // Pick a center
-  double center[3] = {5.0, 6.0, 7.0};
+  // Position of 2013 RR165 at MJD=56537.2416032334:
+  double center[3] = {2.32545784897911, -0.459940068868785, 0.0788698905258432};
 
   // Project
   struct GnomonicPointSources gnomonic;
@@ -29,14 +41,15 @@ static char* test_cartesian_to_gnomonic_projection() {
   // Check the results
   // TODO: Do these by hand, and check that the results are correct.
   // TODO: Better unit test assertions for floating point numbers.
+    
   ut_assert(gnomonic.x.length == 3, "wrong length for x");
-  ut_assert(gnomonic.x.data[0] == -0.13622291021671836808, "wrong value for x[0]");
-  ut_assert(gnomonic.x.data[1] == -8.46844895759339858735765083616e-17, "wrong value for x[1]");
-  ut_assert(gnomonic.x.data[2] == 0.02844214608920491230, "wrong value for x[2]");
+  ut_assert(gnomonic.x.data[0] == 0.26488865499153, "wrong value for x[0]");
+  ut_assert(gnomonic.x.data[1] == 0.264158742296632, "wrong value for x[1]");
+  ut_assert(gnomonic.x.data[2] == 0.267926881709716, "wrong value for x[2]");
   ut_assert(gnomonic.y.length == 3, "wrong length for y");
-  ut_assert(gnomonic.y.data[0] == 0.25976689737960406701, "wrong value for y[0]");
-  ut_assert(gnomonic.y.data[1] == 0.0, "wrong value for y[1]");
-  ut_assert(gnomonic.y.data[2] == -0.05423704450782939473, "wrong value for y[2]");
+  ut_assert(gnomonic.y.data[0] == 0.178261157983677, "wrong value for y[0]");
+  ut_assert(gnomonic.y.data[1] == 0.155105149861758, "wrong value for y[1]");
+  ut_assert(gnomonic.y.data[2] == 0.16476328675463, "wrong value for y[2]");
 
   // Times should be unchanged:
   ut_assert(gnomonic.t.length == 3, "wrong length for t");
@@ -47,7 +60,7 @@ static char* test_cartesian_to_gnomonic_projection() {
   // Clean up
   gnomonic_point_sources_free(&gnomonic);
   cartesian_point_sources_free(&cartesian);
-  
+
   return 0;
 }
 
@@ -56,7 +69,7 @@ static char * all_tests() {
   return 0;
 }
 
-int main() {
+int main(void) {
   char *result = all_tests();
   if (result != 0) {
     printf("FAILURE: %s\n", result);
@@ -65,5 +78,4 @@ int main() {
   }
   printf("Tests run: %d\n", tests_run);
   return result != 0;
-  
 }

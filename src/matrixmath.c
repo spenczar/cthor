@@ -36,3 +36,9 @@ int matinv_3x3(double matrix[3][3], double matrix_inv[3][3]) {
   return MATRIX_MATH_ERROR_NONE;
 }
 
+void cross_3(double a[3], double b[3], double result[3]) {
+  /// Returns the cross product of two 3-vectors.
+  result[0] = a[1] * b[2] - a[2] * b[1];
+  result[1] = a[2] * b[0] - a[0] * b[2];
+  result[2] = a[0] * b[1] - a[1] * b[0];
+}

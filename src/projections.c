@@ -27,18 +27,12 @@ int cartesian_to_gnomonic(struct CartesianPointSources *cartesian, double center
   // Cross the center vector with the x-axis to get the second basis vector.
   double x_axis[3] = {1.0, 0.0, 0.0};
 
-  double second_basis_vec[3] = {
-    center_vec[1] * x_axis[2] - center_vec[2] * x_axis[1],
-    center_vec[2] * x_axis[0] - center_vec[0] * x_axis[2],
-    center_vec[0] * x_axis[1] - center_vec[1] * x_axis[0]
-  };
+  double second_basis_vec[3];
+  cross_3(center_vec, x_axis, second_basis_vec);
 
   // Cross the center vector with the second basis vector to get the third basis vector.
-  double third_basis_vec[3] = {
-    center_vec[1] * second_basis_vec[2] - center_vec[2] * second_basis_vec[1],
-    center_vec[2] * second_basis_vec[0] - center_vec[0] * second_basis_vec[2],
-    center_vec[0] * second_basis_vec[1] - center_vec[1] * second_basis_vec[0]
-  };
+  double third_basis_vec[3];
+  cross_3(center_vec, second_basis_vec, third_basis_vec);
 
   // Now, we can project the cartesian coordinates onto the new basis.
   // To do that, start by inverting the basis matrix.
