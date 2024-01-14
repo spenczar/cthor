@@ -25,37 +25,35 @@ static char* test_cartesian_to_gnomonic_projection(void) {
 			       56537.2416032334);
   cartesian_point_sources_push(&cartesian,
 			       2.32729293752894,
-			       0.449243941523289,
+			       -0.449243941523289,
 			       0.0860639174895683,
 			       56537.2416032334);
 
   // Position of 2013 RR165 at MJD=56537.2416032334:
   double center[3] = {2.32545784897911, -0.459940068868785, 0.0788698905258432};
+  double center_velocity[3] = {0.00257146073153728, 0.011315544836752, 0.00041171196985311};
 
   // Project
   struct GnomonicPointSources gnomonic;
   status = gnomonic_point_sources_new(&gnomonic, cartesian.x.length);
-  status = cartesian_to_gnomonic(&cartesian, center, &gnomonic);
+  status = cartesian_to_gnomonic(&cartesian, center, center_velocity, &gnomonic);
   ut_assert(status == 0, "cartesian_to_gnomonic failed");
 
   // Check the results
-  // TODO: Do these by hand, and check that the results are correct.
-  // TODO: Better unit test assertions for floating point numbers.
-    
   ut_assert(gnomonic.x.length == 3, "wrong length for x");
-  ut_assert(gnomonic.x.data[0] == 0.26488865499153, "wrong value for x[0]");
-  ut_assert(gnomonic.x.data[1] == 0.264158742296632, "wrong value for x[1]");
-  ut_assert(gnomonic.x.data[2] == 0.267926881709716, "wrong value for x[2]");
+  ut_assert_feq(gnomonic.x.data[0], 0.26488865499153);
+  ut_assert_feq(gnomonic.x.data[1], 0.264158742296632);
+  ut_assert_feq(gnomonic.x.data[2], 0.267926881709716);
   ut_assert(gnomonic.y.length == 3, "wrong length for y");
-  ut_assert(gnomonic.y.data[0] == 0.178261157983677, "wrong value for y[0]");
-  ut_assert(gnomonic.y.data[1] == 0.155105149861758, "wrong value for y[1]");
-  ut_assert(gnomonic.y.data[2] == 0.16476328675463, "wrong value for y[2]");
+  ut_assert_feq(gnomonic.y.data[0], 0.178261157983677);
+  ut_assert_feq(gnomonic.y.data[1], 0.155105149861758);
+  ut_assert_feq(gnomonic.y.data[2], 0.16476328675463);
 
   // Times should be unchanged:
   ut_assert(gnomonic.t.length == 3, "wrong length for t");
-  ut_assert(gnomonic.t.data[0] == cartesian.t.data[0], "wrong value for t[0]");
-  ut_assert(gnomonic.t.data[1] == cartesian.t.data[1], "wrong value for t[1]");
-  ut_assert(gnomonic.t.data[2] == cartesian.t.data[2], "wrong value for t[2]");
+  ut_assert_feq(gnomonic.t.data[0], cartesian.t.data[0]);
+  ut_assert_feq(gnomonic.t.data[1], cartesian.t.data[1]);
+  ut_assert_feq(gnomonic.t.data[2], cartesian.t.data[2]);
 
   // Clean up
   gnomonic_point_sources_free(&gnomonic);
