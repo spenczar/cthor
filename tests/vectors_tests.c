@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "unittests.h"
 #include "vectors.h"
 
 int tests_run = 0;
 
-static char * test_vector_new() {
+static char *test_vector_new() {
   struct Vec vec;
   vector_new(&vec, 10, sizeof(double));
   ut_assert(vec.length == 0, "wrong length");
@@ -16,14 +17,14 @@ static char * test_vector_new() {
   return 0;
 }
 
-static char * test_vector_new_invalid_capacity() {
+static char *test_vector_new_invalid_capacity() {
   struct Vec vec;
   int status = vector_new(&vec, 0, sizeof(double));
   ut_assert(status == -1, "invalid capacity");
   return 0;
 }
 
-static char * test_vec_f64_new() {
+static char *test_vec_f64_new() {
   struct VecF64 vec;
   vec_f64_new(&vec, 10);
   ut_assert(vec.length == 0, "wrong length");
@@ -33,14 +34,14 @@ static char * test_vec_f64_new() {
   return 0;
 }
 
-static char * test_vec_f64_new_invalid_capacity() {
+static char *test_vec_f64_new_invalid_capacity() {
   struct VecF64 vec;
   int status = vec_f64_new(&vec, 0);
   ut_assert(status == -1, "did not report invalid capacity");
   return 0;
 }
 
-static char * test_vec_f64_push() {
+static char *test_vec_f64_push() {
   struct VecF64 vec;
   vec_f64_new(&vec, 1);
   vec_f64_push(&vec, 1.0);
@@ -68,12 +69,12 @@ static char * test_vec_f64_push() {
   ut_assert(vec.data[1] == 2.0, "stage 4: wrong value 1");
   ut_assert(vec.data[2] == 3.0, "stage 4: wrong value 2");
   ut_assert(vec.data[3] == 4.0, "stage 4: wrong value 3");
-  
+
   vec_f64_free(&vec);
   return 0;
 }
 
-static char * test_vec_f64_get() {
+static char *test_vec_f64_get() {
   struct VecF64 vec;
   vec_f64_new(&vec, 8);
   vec_f64_push(&vec, 1.0);
@@ -98,12 +99,12 @@ static char * test_vec_f64_get() {
 
   status = vec_f64_get(&vec, -1, &value);
   ut_assert(status == -1, "stage 5: get failed");
-  
+
   vec_f64_free(&vec);
   return 0;
 }
 
-static char * all_tests() {
+static char *all_tests() {
   ut_run_test(test_vector_new);
   ut_run_test(test_vector_new_invalid_capacity);
   ut_run_test(test_vec_f64_new);
@@ -122,5 +123,4 @@ int main() {
   }
   printf("Tests run: %d\n", tests_run);
   return result != 0;
-  
 }

@@ -1,10 +1,11 @@
+#include <stdio.h>
+
 #include "matrixmath.h"
 #include "unittests.h"
-#include <stdio.h>
 
 int tests_run = 0;
 
-static char * test_matmul_3x3_3x1() {
+static char *test_matmul_3x3_3x1() {
   double matrix[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
   double vec[3] = {1, 2, 3};
   double result[3];
@@ -15,7 +16,7 @@ static char * test_matmul_3x3_3x1() {
   return 0;
 }
 
-static char * test_matinv_3x3() {
+static char *test_matinv_3x3() {
   double matrix[3][3] = {{1, 2, 3}, {0, 1, 4}, {5, 6, 0}};
   double result[3][3];
 
@@ -93,12 +94,12 @@ static char *test_normalize() {
   return 0;
 }
 
-static char * all_tests() {
+static char *all_tests() {
   ut_run_test(test_matmul_3x3_3x1);
   ut_run_test(test_matinv_3x3);
   ut_run_test(test_matinv_3x3_noninvertable);
   ut_run_test(test_magnitude);
-  ut_run_test(test_normalize);  
+  ut_run_test(test_normalize);
   return 0;
 }
 
@@ -112,4 +113,3 @@ int main() {
   printf("Tests run: %d\n", tests_run);
   return result != 0;
 }
-

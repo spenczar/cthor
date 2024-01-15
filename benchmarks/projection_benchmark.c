@@ -1,10 +1,10 @@
-#include <time.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+#include <time.h>
 
-#include "projections.h"
 #include "point_sources.h"
+#include "projections.h"
 
 static double center_position[3] = {0.9, 0.8, 0.01};
 static double center_velocity[3] = {-0.05, 0.05, 0.00001};

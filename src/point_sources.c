@@ -1,10 +1,13 @@
+#include "point_sources.h"
+
 #include <stddef.h>
 #include <stdlib.h>
-#include "point_sources.h"
-#include "vectors.h"
-#include "str.h"
 
-int topocentric_point_sources_new(struct TopocentricPointSources *topocentric, size_t capacity, struct String *obscode) {
+#include "str.h"
+#include "vectors.h"
+
+int topocentric_point_sources_new(struct TopocentricPointSources *topocentric, size_t capacity,
+                                  struct String *obscode) {
   /// Create a new TopocentricPointSources object with the given
   /// capacity. Takes ownership of obscode.
   if (vec_f64_new(&topocentric->ra, capacity) != 0) {
@@ -19,7 +22,7 @@ int topocentric_point_sources_new(struct TopocentricPointSources *topocentric, s
   topocentric->obscode = obscode;
   return 0;
 
- fail:
+fail:
   topocentric_point_sources_free(topocentric);
   return -1;
 }
@@ -53,7 +56,7 @@ int cartesian_point_sources_new(struct CartesianPointSources *cartesian, size_t 
 
   return 0;
 
- fail:
+fail:
   cartesian_point_sources_free(cartesian);
   return -1;
 }
@@ -85,7 +88,7 @@ int gnomonic_point_sources_new(struct GnomonicPointSources *gnomonic, size_t cap
 
   return 0;
 
- fail:
+fail:
   gnomonic_point_sources_free(gnomonic);
   return -1;
 }

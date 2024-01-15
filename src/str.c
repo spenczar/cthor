@@ -1,7 +1,7 @@
+#include "str.h"
+
 #include <stdlib.h>
 #include <string.h>
-
-#include "str.h"
 
 int string_new(struct String *string, size_t length) {
   if (length < 1) {

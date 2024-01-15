@@ -1,6 +1,6 @@
-#include <math.h>
 #include "matrixmath.h"
 
+#include <math.h>
 
 void matmul_3x3_3x1(double matrix[3][3], double vec[3], double result[3]) {
   /// Multiplies a 3x3 matrix by a 3x1 vector.
@@ -39,7 +39,6 @@ void matscale(double matrix[3][3], double scale) {
   matrix[2][1] *= scale;
   matrix[2][2] *= scale;
 }
-	
 
 int matinv_3x3(double matrix[3][3], double matrix_inv[3][3]) {
   /// Inverts a 3x3 matrix.
@@ -47,14 +46,14 @@ int matinv_3x3(double matrix[3][3], double matrix_inv[3][3]) {
   double d1 = matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1];
   double d2 = matrix[1][0] * matrix[2][2] - matrix[1][2] * matrix[2][0];
   double d3 = matrix[1][0] * matrix[2][1] - matrix[1][1] * matrix[2][0];
-  
+
   double det = matrix[0][0] * d1 - matrix[0][1] * d2 + matrix[0][2] * d3;
 
   if (det == 0) {
     // Matrix is not invertible.
     return MATRIX_MATH_ERROR_NOT_INVERTIBLE;
   }
-  
+
   double invdet = 1 / det;
 
   matrix_inv[0][0] = (matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1]) * invdet;

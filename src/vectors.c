@@ -1,6 +1,7 @@
+#include "vectors.h"
+
 #include <stdlib.h>
 #include <string.h>
-#include "vectors.h"
 
 int vector_new(struct Vec *vec, size_t capacity, size_t item_size) {
   if (capacity < 1) {
@@ -39,7 +40,6 @@ int vector_get(struct Vec *vec, size_t index, void *item) {
   memcpy(item, vec->data + index * vec->item_size, vec->item_size);
   return 0;
 }
-
 
 void vec_f64_free(struct VecF64 *vec) {
   if (vec->data != NULL) {

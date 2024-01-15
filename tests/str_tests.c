@@ -1,10 +1,11 @@
+#include <stdio.h>
+
 #include "str.h"
 #include "unittests.h"
-#include <stdio.h>
 
 int tests_run = 0;
 
-static char * test_string_new() {
+static char *test_string_new() {
   struct String string;
   int status = string_new(&string, 10);
   ut_assert(status == 0, "string_new failed");
@@ -14,9 +15,9 @@ static char * test_string_new() {
   return 0;
 }
 
-static char * test_string_create() {
+static char *test_string_create() {
   char *data = "hello";
-  
+
   struct String string = string_create(data);
   ut_assert(string.length == 5, "wrong length");
   ut_assert(string.data != NULL, "data is null");
@@ -32,7 +33,7 @@ static char * test_string_create() {
   return 0;
 }
 
-static char * all_tests() {
+static char *all_tests() {
   ut_run_test(test_string_new);
   ut_run_test(test_string_create);
   return 0;

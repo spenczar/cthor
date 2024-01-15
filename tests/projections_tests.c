@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "unittests.h"
-#include "projections.h"
+
 #include "point_sources.h"
+#include "projections.h"
+#include "unittests.h"
 
 int tests_run = 0;
 
@@ -13,21 +14,9 @@ static char* test_cartesian_to_gnomonic_projection(void) {
   int status = cartesian_point_sources_new(&cartesian, 10);
   ut_assert(status == 0, "cartesian_point_sources_new failed");
 
-  cartesian_point_sources_push(&cartesian,
-			       2.32724566583692,
-			       -0.449382385055792,
-			       0.0866176471970003,
-			       56537.2416032334);
-  cartesian_point_sources_push(&cartesian,
-			       2.32728038367672,
-			       -0.44938629368127,
-			       0.0856592596632065,
-			       56537.2416032334);
-  cartesian_point_sources_push(&cartesian,
-			       2.32729293752894,
-			       -0.449243941523289,
-			       0.0860639174895683,
-			       56537.2416032334);
+  cartesian_point_sources_push(&cartesian, 2.32724566583692, -0.449382385055792, 0.0866176471970003, 56537.2416032334);
+  cartesian_point_sources_push(&cartesian, 2.32728038367672, -0.44938629368127, 0.0856592596632065, 56537.2416032334);
+  cartesian_point_sources_push(&cartesian, 2.32729293752894, -0.449243941523289, 0.0860639174895683, 56537.2416032334);
 
   // Position of 2013 RR165 at MJD=56537.2416032334:
   double center[3] = {2.32545784897911, -0.459940068868785, 0.0788698905258432};
@@ -62,13 +51,13 @@ static char* test_cartesian_to_gnomonic_projection(void) {
   return 0;
 }
 
-static char * all_tests() {
+static char* all_tests() {
   ut_run_test(test_cartesian_to_gnomonic_projection);
   return 0;
 }
 
 int main(void) {
-  char *result = all_tests();
+  char* result = all_tests();
   if (result != 0) {
     printf("FAILURE: %s\n", result);
   } else {

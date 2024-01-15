@@ -45,9 +45,9 @@ $(TESTS): CFLAGS += -Isrc -Itests -DDEBUG -g
 $(TESTS): $(TARGET) $(TEST_SRC) 
 	$(CC) $(CFLAGS) $@.c -o $@ $(TARGET) -lm
 
-$(BENCHMARKS): CFLAGS += -Isrc -Ibenchmarks -O3 -march=native -mtune=native -flto 
+$(BENCHMARKS): CFLAGS += -Isrc -Ibenchmarks -O3 -march=native -mtune=native -flto
 $(BENCHMARKS): $(BENCHMARKS_SRC) $(TARGET)
-	$(CC) $(CFLAGS) $@.c -o $@ $(TARGET) -lm -flto
+	$(CC) $(CFLAGS) $@.c -o $@ $(TARGET) -lm 
 
 tests: $(TESTS) 
 	./tests/runtests.sh
@@ -61,3 +61,5 @@ tests/%.o: tests/%.c src/%.c $(TARGET)
 	@mkdir -p build
 	$(CC) $(CFLAGS) -c $< -o $@
 
+format: $(SOURCES) $(TEST_SRC) $(BENCHMARKS_SRC)
+	clang-format -i $^

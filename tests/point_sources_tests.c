@@ -1,4 +1,5 @@
 #include <stdio.h>
+
 #include "point_sources.h"
 #include "unittests.h"
 
@@ -31,7 +32,7 @@ static char* test_topocentric_point_sources() {
   ut_assert(topocentric.t.data[2] == 9.0, "wrong value for t[2]");
 
   topocentric_point_sources_free(&topocentric);
-  
+
   return 0;
 }
 
@@ -62,7 +63,7 @@ static char* test_cartesian_point_sources() {
   ut_assert(cartesian.t.data[0] == 4.0, "wrong value for t[0]");
   ut_assert(cartesian.t.data[1] == 8.0, "wrong value for t[1]");
   ut_assert(cartesian.t.data[2] == 12.0, "wrong value for t[2]");
-  
+
   cartesian_point_sources_free(&cartesian);
   return 0;
 }
@@ -90,12 +91,12 @@ static char* test_gnomonic_point_sources() {
   ut_assert(gnomonic.t.data[0] == 3.0, "wrong value for t[0]");
   ut_assert(gnomonic.t.data[1] == 6.0, "wrong value for t[1]");
   ut_assert(gnomonic.t.data[2] == 9.0, "wrong value for t[2]");
-	
+
   gnomonic_point_sources_free(&gnomonic);
   return 0;
 }
 
-static char * all_tests() {
+static char* all_tests() {
   ut_run_test(test_topocentric_point_sources);
   ut_run_test(test_cartesian_point_sources);
   ut_run_test(test_gnomonic_point_sources);
@@ -103,7 +104,7 @@ static char * all_tests() {
 }
 
 int main() {
-  char *result = all_tests();
+  char* result = all_tests();
   if (result != 0) {
     printf("%s\n", result);
   } else {

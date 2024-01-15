@@ -1,8 +1,10 @@
-#include <math.h>
 #include "projections.h"
-#include "matrixmath.h"
+
 #include <assert.h>
+#include <math.h>
 #include <string.h>
+
+#include "matrixmath.h"
 
 #define FLOAT_EPSILON 1E-10
 #define _SQRT_TWO 1.41421356237309504880168872420969807856967187537694807317667973799
@@ -13,11 +15,7 @@ int CT_ERR_OUT_OF_MEMORY = 3;
 
 static double rad_to_deg(double rad);
 
-static double identity_matrix[3][3] = {
-	{1.0, 0.0, 0.0},
-	{0.0, 1.0, 0.0},
-	{0.0, 0.0, 1.0}
-};
+static double identity_matrix[3][3] = {{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}};
 
 int normal_vector(double center_pos[3], double center_velocity[3], double normal[3]) {
   // Check that the center point is not the origin.
@@ -37,7 +35,7 @@ int normal_vector(double center_pos[3], double center_velocity[3], double normal
   } else {
     memcpy(center_velocity_corrected, center_velocity, sizeof(double) * 3);
   }
-  
+
   cross(center_pos, center_velocity_corrected, normal);
   if (normalize(normal) != 0) {
     return CT_ERR_INVALID_CENTER;
@@ -71,11 +69,7 @@ static int r1_matrix(double center_pos[3], double center_velocity[3], double r1[
   double cos_theta = dot(n_hat, z_axis);
 
   // Compute the skew-symmetric matrix, V.
-  double V[3][3] = {
-    {0.0, -nu[2], nu[1]},
-    {nu[2], 0.0, -nu[0]},
-    {-nu[1], nu[0], 0.0}
-  };
+  double V[3][3] = {{0.0, -nu[2], nu[1]}, {nu[2], 0.0, -nu[0]}, {-nu[1], nu[0], 0.0}};
 
   double V_squared[3][3];
   matsquare_3x3(V, V_squared);
@@ -129,8 +123,8 @@ static int gnomonic_rotation_matrix(double center_pos[3], double center_velocity
   return 0;
 }
 
-
-int cartesian_to_gnomonic(struct CartesianPointSources *cartesian, double center_pos[3], double center_velocity[3], struct GnomonicPointSources *gnomonic) {
+int cartesian_to_gnomonic(struct CartesianPointSources *cartesian, double center_pos[3], double center_velocity[3],
+                          struct GnomonicPointSources *gnomonic) {
   // Check that the gnomonic point sources are empty.
   assert(gnomonic->x.length == 0);
 
@@ -143,15 +137,11 @@ int cartesian_to_gnomonic(struct CartesianPointSources *cartesian, double center
     double cartesian_vec[3] = {cartesian->x.data[i], cartesian->y.data[i], cartesian->z.data[i]};
     double rotated_vec[3];
     matmul_3x3_3x1(rotation_matrix, cartesian_vec, rotated_vec);
-    gnomonic_point_sources_push(gnomonic,
-				rad_to_deg(rotated_vec[1] / rotated_vec[0]), 
-				rad_to_deg(rotated_vec[2] / rotated_vec[0]),
-				cartesian->t.data[i]);
+    gnomonic_point_sources_push(gnomonic, rad_to_deg(rotated_vec[1] / rotated_vec[0]),
+                                rad_to_deg(rotated_vec[2] / rotated_vec[0]), cartesian->t.data[i]);
   }
 
   return 0;
 }
 
-static double rad_to_deg(double rad) {
-  return rad * 180.0 / M_PI;
-}
+static double rad_to_deg(double rad) { return rad * 180.0 / M_PI; }
