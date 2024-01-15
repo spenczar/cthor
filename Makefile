@@ -7,10 +7,14 @@ OBJECTS=$(patsubst %.c,%.o,$(SOURCES))
 
 TEST_SRC=$(wildcard tests/*.c)
 TESTS=$(patsubst %.c,%,$(TEST_SRC))
+
+BENCHMARKS_SRC=$(wildcard benchmarks/*.c)
+BENCHMARKS=$(patsubst %.c,%,$(BENCHMARKS_SRC))
+
 TARGET=build/libcthor.a
 TARGET_BIN=build/cthor
 
-.PHONY: all clean tests
+.PHONY: all clean tests benchmarks
 
 all: build/libcthor.a
 
@@ -37,10 +41,16 @@ build/lib: build
 
 $(TESTS): CFLAGS += -Isrc -Itests -DDEBUG -g
 $(TESTS): $(TARGET) $(TEST_SRC) 
-	$(CC) $(CFLAGS) $@.c -o $@ $(TARGET) -lm 
+	$(CC) $(CFLAGS) $@.c -o $@ $(TARGET) -lm
+
+$(BENCHMARKS): CFLAGS += -Isrc -Ibenchmarks -O3 -march=native 
+$(BENCHMARKS): $(BENCHMARKS_SRC) $(TARGET)
+	$(CC) $(CFLAGS) $@.c -o $@ $(TARGET) -lm
 
 tests: $(TESTS) 
 	./tests/runtests.sh
+
+benchmarks: $(BENCHMARKS)
 
 valgrind-tests: $(TESTS)
 	@env VALGRIND=1 ./tests/runtests.sh
