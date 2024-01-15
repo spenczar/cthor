@@ -72,8 +72,8 @@ double median(double *xs, size_t n) {
 }
 
 int main(void) {
-  struct CartesianPointSources cartesian;
-  struct GnomonicPointSources gnomonic;
+  struct CartesianPointSources cartesian = CARTESIAN_POINT_SOURCES_ZERO;
+  struct GnomonicPointSources gnomonic = GNOMONIC_POINT_SOURCES_ZERO;
   gnomonic_point_sources_new(&gnomonic, N_POINTS);
   generate_point_sources(&cartesian, N_POINTS);
 

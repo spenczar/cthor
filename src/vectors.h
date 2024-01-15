@@ -13,6 +13,8 @@ void vector_free(struct Vec *vec);
 void vector_push(struct Vec *vec, void *item);
 int vector_get(struct Vec *vec, size_t index, void *item);
 
+#define VECF64_ZERO {.length = 0, .capacity = 0, .data = NULL}
+
 struct VecF64 {
   /// A vector of 64-bit floating point numbers.
   size_t length;

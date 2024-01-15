@@ -14,6 +14,8 @@ struct TopocentricPointSources {
   struct String *obscode;
 };
 
+#define TOPOCENTRIC_POINT_SOURCES_ZERO {.ra = VECF64_ZERO, .dec = VECF64_ZERO, .t = VECF64_ZERO, .obscode = NULL}
+
 int topocentric_point_sources_new(struct TopocentricPointSources *topocentric, size_t capacity, struct String *obscode);
 void topocentric_point_sources_free(struct TopocentricPointSources *topocentric);
 void topocentric_point_sources_push(struct TopocentricPointSources *topocentric, double ra, double dec, double t);
@@ -27,6 +29,8 @@ struct CartesianPointSources {
   struct VecF64 t;  // MJD
 };
 
+#define CARTESIAN_POINT_SOURCES_ZERO {.x = VECF64_ZERO, .y = VECF64_ZERO, .z = VECF64_ZERO, .t = VECF64_ZERO}
+
 int cartesian_point_sources_new(struct CartesianPointSources *cartesian, size_t capacity);
 void cartesian_point_sources_free(struct CartesianPointSources *cartesian);
 void cartesian_point_sources_push(struct CartesianPointSources *cartesian, double x, double y, double z, double t);
@@ -38,6 +42,8 @@ struct GnomonicPointSources {
   struct VecF64 y;
   struct VecF64 t;
 };
+
+#define GNOMONIC_POINT_SOURCES_ZERO {.x = VECF64_ZERO, .y = VECF64_ZERO, .t = VECF64_ZERO}
 
 int gnomonic_point_sources_new(struct GnomonicPointSources *gnomonic, size_t capacity);
 void gnomonic_point_sources_free(struct GnomonicPointSources *gnomonic);

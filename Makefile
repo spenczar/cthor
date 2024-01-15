@@ -20,8 +20,10 @@ all: build/libcthor.a
 
 clean:
 	rm -f $(OBJECTS)
+	rm -f $(TESTS)
+	rm -f $(BENCHMARKS)
+	rm -f $(TARGET)
 	rm -rf build
-	rm -f tests/*_tests
 	rm -f tests/tests.log
 
 # Add -lm for math.h
@@ -43,9 +45,9 @@ $(TESTS): CFLAGS += -Isrc -Itests -DDEBUG -g
 $(TESTS): $(TARGET) $(TEST_SRC) 
 	$(CC) $(CFLAGS) $@.c -o $@ $(TARGET) -lm
 
-$(BENCHMARKS): CFLAGS += -Isrc -Ibenchmarks -O3 -march=native 
+$(BENCHMARKS): CFLAGS += -Isrc -Ibenchmarks -O3 -march=native -mtune=native -flto 
 $(BENCHMARKS): $(BENCHMARKS_SRC) $(TARGET)
-	$(CC) $(CFLAGS) $@.c -o $@ $(TARGET) -lm
+	$(CC) $(CFLAGS) $@.c -o $@ $(TARGET) -lm -flto
 
 tests: $(TESTS) 
 	./tests/runtests.sh
